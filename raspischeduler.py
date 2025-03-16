@@ -1,4 +1,3 @@
-(venv) notifytrack@notifytrack:~/iot-platform $ cat app/tasks.py 
 import requests
 import subprocess
 import json
@@ -16,7 +15,7 @@ RASPI_SMS_API_KEY = PROCESS.env.RASPISMSAPI
 RASPI_SMS_URL = "http://localhost:8080//api/scheduled/"
 ID_PHONE = 6  # ID of the phone sending SMS
 
-# --- File to Track Sent SMS ---
+# --- logs ---
 SENT_SMS_FILE = "sent_sms.json"
 
 def load_sent_sms():
@@ -24,7 +23,7 @@ def load_sent_sms():
     if os.path.exists(SENT_SMS_FILE):
         with open(SENT_SMS_FILE, "r") as file:
             return json.load(file)
-    return {}  # Return empty dictionary if file doesn't exist
+    return {} 
 
 def save_sent_sms(sent_sms):
     """Save updated sent SMS records to JSON file."""
