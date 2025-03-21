@@ -16,9 +16,9 @@ class Auth:
             'https://www.googleapis.com/auth/calendar.readonly',
             'https://www.googleapis.com/auth/calendar.events.readonly'
         ]
-        self.CLIENT_SECRETS_FILE = "/home/sciproject/mysite/credentials.json"
-        self.TOKEN_DIR = "/home/sciproject/mysite/tokens"
-        self.REDIRECT_URI = "https://sciproject.pythonanywhere.com/callback"
+        self.CLIENT_SECRETS_FILE = os.environ.get("CLIENT_SECRETS_PATH")
+        self.TOKEN_DIR = os.environ.get("TOKEN_DIR")
+        self.REDIRECT_URI = os.environ.get("REDIRECT_URI")
 
         if not os.path.exists(self.TOKEN_DIR):
             os.makedirs(self.TOKEN_DIR)
@@ -28,7 +28,7 @@ class Auth:
 
     def init_auth(self):
         """Initialise les paramètres d'authentification"""
-        self.app.secret_key = '7a9e6d4b3f2c1a8d5b7e9f4c2a1d8b3e6f4c2a9d7b5e3f1c8a6d4b2e9f7c3a5'
+        self.app.secret_key = os.environ.get('FLASK_SECRET_KEY')
         self.app.config['SESSION_COOKIE_SECURE'] = True
         self.app.config['SESSION_COOKIE_HTTPONLY'] = True
         self.app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
@@ -41,7 +41,7 @@ class Auth:
     def check_token_validity(self, user_email):
         """Vérifie si le token existe et est valide"""
         token_path = os.path.join(self.TOKEN_DIR, f"{user_email}.pickle")
-        
+
         if not os.path.exists(token_path):
             return None
 
@@ -69,11 +69,11 @@ class Auth:
         def wrapper(*args, **kwargs):
             if 'user_email' not in session:
                 return redirect(url_for('authorize'))
-            
+
             credentials = self.check_token_validity(session['user_email'])
             if not credentials:
                 return redirect(url_for('authorize'))
-            
+
             return f(*args, **kwargs)
         wrapper.__name__ = f.__name__
         return wrapper
