@@ -5,7 +5,7 @@ import paho.mqtt.client as mqtt
 
 # MQTT Broker Configuration
 MQTT_BROKER = "127.0.0.1"  
-MQTT_PORT = 1883  # Default MQTT port
+MQTT_PORT = 1883 
 MQTT_TOPIC = "home/temperature"  # Topic to publish temperature data
 MQTT_TOPIC_HUMIDITY = "home/humidity"  # Topic to publish humidity data
 MQTT_CLIENT_ID = "raspberry_dht22"  # Unique client ID
@@ -48,13 +48,12 @@ try:
             print(f"OS error with sensor: {e}. Restarting sensor...")
             dht_device.exit()
             time.sleep(2)
-            dht_device = adafruit_dht.DHT22(board.D4)  # Reinitialize sensor
+            dht_device = adafruit_dht.DHT22(board.D4) 
 
         except Exception as e:
             print(f"Unexpected error: {e}")
 
-        time.sleep(10)  # Read sensor every 10 seconds
-
+        time.sleep(10)  
 except KeyboardInterrupt:
     print("Exiting...")
 
@@ -63,6 +62,6 @@ except Exception as e:
 
 finally:
     print("Cleaning up...")
-    client.loop_stop()  # Stop the MQTT loop
+    client.loop_stop() 
     client.disconnect()
     dht_device.exit()
