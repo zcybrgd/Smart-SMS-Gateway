@@ -13,10 +13,10 @@ EVENTS_URL = PROCESS.env.GCURL
 # --- RaspiSMS API Details ---
 RASPI_SMS_API_KEY = PROCESS.env.RASPISMSAPI
 RASPI_SMS_URL = "http://localhost:8080//api/scheduled/"
-ID_PHONE = 6  # ID of the phone sending SMS
+ID_PHONE = PROCESS.env.IDPHONE
 
 # --- logs ---
-SENT_SMS_FILE = "sent_sms.json"
+SENT_SMS_FILE = PROCESS.env.LOGPATH
 
 def load_sent_sms():
     """Load sent SMS records from JSON file."""
@@ -84,7 +84,7 @@ def fetch_and_store_events():
                 -d 'text={sms_text}' \
                 -d 'numbers={phone_number}' \
                 -d 'id_phone={ID_PHONE}' \
-                -d 'at={at_time}'"""
+                -d 'at={at_time}'""
 
                 # Execute cURL
                 process = subprocess.run(curl_command, shell=True, capture_output=True, text=True)
