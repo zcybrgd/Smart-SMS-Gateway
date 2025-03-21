@@ -6,23 +6,19 @@ import json
 import paho.mqtt.client as mqtt
 from azure.iot.device import IoTHubDeviceClient, Message
 
-# MQTT Configuration
+
 MQTT_BROKER = "127.0.0.1" 
 MQTT_PORT = 1883
 MQTT_TOPIC_TEMP = "home/temperature"
 MQTT_TOPIC_HUMIDITY = "home/humidity"
 MQTT_CLIENT_ID = "raspberry_dht22"
 
-# DHT22 Sensor Setup
 dht_device = adafruit_dht.DHT22(board.D4)
 
-# Azure IoT Hub Configuration (set as environment variable)
 CONNECTION_STRING = os.getenv("AZURE_IOT_HUB_CONNECTION_STRING")
 
-# Initialize Azure IoT Client
 azure_client = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING)
 
-# MQTT Client Setup
 mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_ID, callback_api_version=mqtt.CallbackAPIVersion.VERSION1)
 
 def on_connect(client, userdata, flags, rc):
@@ -45,11 +41,9 @@ try:
             if temperature is not None and humidity is not None:
                 print(f"Temp: {temperature:.1f}°C, Humidity: {humidity:.1f}%")
 
-                # Publish to Local MQTT Broker
                 mqtt_client.publish(MQTT_TOPIC_TEMP, f"{temperature:.1f}")
                 mqtt_client.publish(MQTT_TOPIC_HUMIDITY, f"{humidity:.1f}")
-
-                # Send to Azure IoT Hub
+                #send dqtq to azure
                 data = {
                     "temperature": temperature,
                     "humidity": humidity
